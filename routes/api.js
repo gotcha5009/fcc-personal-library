@@ -98,10 +98,11 @@ module.exports = function (app, client) {
               }
             },
             {
-              upsert: false
+              upsert: false,
+              returnOriginal: false
             }
           );
-          console.log(result.value);
+          //console.log(result);
           res.json(result.value);
         }
       } catch (err) {
@@ -116,10 +117,11 @@ module.exports = function (app, client) {
         let bookid = req.params.id;
         //if successful response will be 'delete successful'
         const collection = client.db('database').collection('books');
-        const result = await collection.deleteOne(new ObjectId(bookid));
-        if (result.deletedCount === 1) {
+        const result = await collection.findOneAndDelete({ _id: new ObjectId(bookid) });
+        if (result.value !== null) {
           res.send('delete successful');
         } else {
+          console.log('this');
           res.send('no book exists');
         }
       } catch (err) {
