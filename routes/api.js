@@ -102,7 +102,11 @@ module.exports = function (app, client) {
               returnOriginal: false
             }
           );
-          //console.log(result);
+          if (result.value === null) {
+            res.send('no book exists');
+          } else {
+            res.json(result.value);
+          }
           res.json(result.value);
         }
       } catch (err) {
